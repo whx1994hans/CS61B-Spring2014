@@ -239,6 +239,22 @@ public class HashTableChained implements Dictionary {
   }
 
   /**
+   * Function to calculate the collision in the table
+   */
+  public int countCollision(){
+    int collision = 0;
+    for(int i = 0; i < lengthForTable; ++ i){
+      if(hashTable[i] != null){
+        int collisionInBucket = ((DList)hashTable[i]).length() - 1;
+        if(collisionInBucket == 0) continue;
+        collision += collisionInBucket;
+        System.out.println("The collision in bucket i is: " + collisionInBucket);
+      }
+    }
+    return collision;
+  }
+
+  /**
    * Test code for hashtable
    */
 

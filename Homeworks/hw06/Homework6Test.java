@@ -16,9 +16,9 @@ public class Homework6Test {
     SimpleBoard board = new SimpleBoard();
     for (int y = 0; y < 8; y++) {
       for (int x = 0; x < 8; x++) {
-	double fval = Math.random() * 12;
-	int value = (int) fval;
-	board.setElementAt(x, y, value);
+        double fval = Math.random() * 12;
+        int value = (int) fval;
+        board.setElementAt(x, y, value);
       }
     }
     return board;
@@ -60,6 +60,8 @@ public class Homework6Test {
     // that counts the number of collisions--or better yet, also prints
     // a histograph of the number of entries in each bucket.  Call this method
     // from here.
+    int collision = table.countCollision();
+    System.out.println("The collision in table is: " + collision);
   }
 
 }

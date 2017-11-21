@@ -102,10 +102,15 @@ public class Tree234 extends IntDictionary {
    **/
   public void insert(int key) {
     // Fill in your solution here.
-    if(find(key)) return null;
+    if(find(key)) return;
+
+    if(root == null){
+      root = new Tree234Node(null, key);
+      return;
+    }
 
     Tree234Node node = root;
-    Tree234Node parent = null;
+    Tree234Node parent = root;
 
     while(node != null){
       if(node.keys == 3 && node == root){
@@ -117,9 +122,11 @@ public class Tree234 extends IntDictionary {
         splitTheNode(node, newNode, newRoot);
         -- newRoot.keys;
         root = newRoot;
+        parent = newRoot;
       }
-      else if(node.key3 == 3){
+      else if(node.keys == 3){
         parent = node.parent;
+
         if(parent.keys == 1){
           if(parent.child1 == node){
             parent.key2 = parent.key1;
@@ -164,43 +171,50 @@ public class Tree234 extends IntDictionary {
         }
       }
 
-      parent = node;
+      node = parent;
+
       if(key < node.key1) node = node.child1;
       else if((node.keys == 1) || (key < node.key2)) node = node.child2;
       else if((node.keys == 2) || (key < node.key3)) node = node.child3;
       else node = node.child4;
+
+      if(node != null) parent = node;
     }
 
-    if(parent.keys == 1){
-      if(key < parent.key1){
-        parent.key2 = parent.key1;
-        parent.key1 = key;
+    if(parent != null){
+      if(parent.keys == 1){
+        if(key < parent.key1){
+          parent.key2 = parent.key1;
+          parent.key1 = key;
+        }
+        else parent.key2 = key;
       }
-      else parent.key2 = key;
-    }
-    else if(parent.keys == 2){
-      if(key < parent.key1){
-        parent.key3 = parent.key2;
-        parent.key2 = parent.key1;
-        parent.key1 = key;
+      else if(parent.keys == 2){
+        if(key < parent.key1){
+          parent.key3 = parent.key2;
+          parent.key2 = parent.key1;
+          parent.key1 = key;
+        }
+        else if(key > parent.key2) parent.key3 = key;
+        else{
+          parent.key3 = parent.key2;
+          parent.key2 = key;
+        }
       }
-      else if(key > parent.key2) parent.key3 = key;
-      else{
-        parent.key3 = parent.key2;
-        parent.key2 = key;
-      }
-    }
 
-    ++ parent.keys;
+      ++ parent.keys;
+    }
   }
 
 
   private void splitTheNode(Tree234Node node, Tree234Node newNode, Tree234Node parent){
     newNode.child1 = node.child3;
     newNode.child2 = node.child4;
+    if(node.child3 != null) node.child3.parent = newNode;
+    if(node.child4 != null) node.child4.parent = newNode;
     node.child3 = node.child4 = null;
     ++ parent.keys;
-    -- node.keys;
+    node.keys -= 2;
     node = parent;
   }
 

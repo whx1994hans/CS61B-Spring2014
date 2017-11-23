@@ -137,14 +137,8 @@ public class BinaryTree implements Dictionary {
     if(node == null) return null;
 
     if(key.compareTo(node.entry.key()) == 0) return node;
-    else if(key.compareTo(node.entry.key()) < 0){
-      if(node.leftChild == null) return null;
-      else return findHelper(key, node.leftChild);
-    }
-    else{
-      if(node.rightChild == null) return null;
-      else return findHelper(key, node.rightChild);
-    }
+    else if(key.compareTo(node.entry.key()) < 0) return findHelper(key, node.leftChild);
+    else return findHelper(key, node.rightChild);
   }
 
   /** 
@@ -167,14 +161,20 @@ public class BinaryTree implements Dictionary {
         if(node == root){
           if(node.rightChild == null) root = node.leftChild;
           else root = node.rightChild;
+
+          if(root != null) root.parent = null;
         }
         else if(node.parent.rightChild == node){
           if(node.rightChild == null) node.parent.rightChild = node.leftChild;
           else node.parent.rightChild = node.rightChild;
+
+          if(node.parent.rightChild != null) node.parent.rightChild.parent = node.parent;
         }
         else if(node.parent.leftChild == node){
           if(node.rightChild == null) node.parent.leftChild = node.leftChild;
           else node.parent.leftChild = node.rightChild;
+
+          if(node.parent.leftChild != null) node.parent.leftChild.parent = node.parent;
         }
       }
       else{
@@ -184,7 +184,10 @@ public class BinaryTree implements Dictionary {
         node.entry.value = minRightNode.entry.value;
         if(minRightNode.parent == node) node.rightChild = null;
         else{
-          if(minRightNode.rightChild != null) minRightNode.parent.leftChild = minRightNode.rightChild;
+          if(minRightNode.rightChild != null){
+            minRightNode.parent.leftChild = minRightNode.rightChild;
+            minRightNode.rightChild.parent = minRightNode.parent;
+          }
           else minRightNode.parent.leftChild = null;
         }
       }
